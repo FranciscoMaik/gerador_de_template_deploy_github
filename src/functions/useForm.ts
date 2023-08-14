@@ -40,6 +40,13 @@ export const useForm = () => {
     ]);
   };
 
+  const handleCopyClick = () => {
+    navigator.clipboard.writeText(generateMarkdown).then(() => {
+      // eslint-disable-next-line no-alert
+      alert('Markdown copiado com sucesso');
+    });
+  };
+
   const filterItemsForType = (type: TypeItem) =>
     items
       .filter(item => item.type === type)
@@ -87,5 +94,6 @@ export const useForm = () => {
     setItemsAdd,
     pullRequestAdd,
     setPullRequestAdd,
+    handleCopyClick,
   };
 };
