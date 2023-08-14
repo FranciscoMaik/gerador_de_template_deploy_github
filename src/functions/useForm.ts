@@ -30,6 +30,7 @@ export const useForm = () => {
   const addItem = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setItems(prevState => [...prevState, { ...itemsAdd, id: uuid() }]);
+    setItemsAdd({ description: '', type: 'feat', id: '' });
   };
 
   const addPullRequest = (e: FormEvent<HTMLFormElement>) => {
@@ -38,6 +39,14 @@ export const useForm = () => {
       ...prevState,
       { ...pullRequestAdd, id: uuid() },
     ]);
+  };
+
+  const removeItem = (id: string) => {
+    setItems(prevState => prevState.filter(item => item.id !== id));
+  };
+
+  const removePullRequest = (id: string) => {
+    setPullRequest(prevState => prevState.filter(item => item.id !== id));
   };
 
   const handleCopyClick = () => {
@@ -51,12 +60,12 @@ export const useForm = () => {
     items
       .filter(item => item.type === type)
       .map((item, index) => `${index + 1}. ${item.description}`)
-      .join('\n');
+      .join('; ');
 
   const generateMarkdown = useMemo(() => {
     const markdownPR = pullRequest
       .map((item, index) => `${index + 1}. #${item.description}`)
-      .join('\n');
+      .join('; ');
 
     const markdown = `
       ## Descrição
@@ -95,5 +104,9 @@ export const useForm = () => {
     pullRequestAdd,
     setPullRequestAdd,
     handleCopyClick,
+    removeItem,
+    removePullRequest,
+    items,
+    pullRequest,
   };
 };
