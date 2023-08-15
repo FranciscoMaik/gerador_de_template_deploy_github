@@ -30,6 +30,7 @@ const Home: React.FC = function () {
           <input
             type="text"
             value={itemsAdd?.description}
+            placeholder="Descrição"
             onChange={value =>
               setItemsAdd({ ...itemsAdd, description: value.target.value })
             }
@@ -58,6 +59,18 @@ const Home: React.FC = function () {
         <button type="submit">Adicionar</button>
       </S.Form>
 
+      <h4>Item(s) adicionados</h4>
+      <ol className="list">
+        {items.map(item => (
+          <li>
+            {item.description}{' '}
+            <button type="button" onClick={() => removeItem(item.id)}>
+              Excluir
+            </button>
+          </li>
+        ))}
+      </ol>
+
       <h4>PRs</h4>
       <S.Form onSubmit={addPullRequest}>
         <div>
@@ -65,6 +78,7 @@ const Home: React.FC = function () {
           <input
             type="text"
             value={pullRequestAdd?.description}
+            placeholder="N° da PR"
             onChange={value =>
               setPullRequestAdd({
                 ...pullRequestAdd,
@@ -76,32 +90,22 @@ const Home: React.FC = function () {
 
         <button type="submit">Adicionar</button>
       </S.Form>
-
-      <h4>Item(s) adicionados</h4>
-      <ol>
-        {items.map(item => (
-          <>
-            <li>{item.description}</li>
-            <button type="button" onClick={() => removeItem(item.id)}>
-              Excluir
-            </button>
-          </>
-        ))}
-      </ol>
       <h4>PR(s) adicionadas</h4>
-      <ol>
+      <ol className="list">
         {pullRequest.map(item => (
-          <>
-            <li>{item.description}</li>
+          <li>
+            {item.description}{' '}
             <button type="button" onClick={() => removePullRequest(item.id)}>
               Excluir
             </button>
-          </>
+          </li>
         ))}
       </ol>
 
-      <h4>Resultado</h4>
-      <ReactMarkdown>{generateMarkdown}</ReactMarkdown>
+      <S.MarkdownContainer>
+        <h4>Resultado</h4>
+        <ReactMarkdown>{generateMarkdown}</ReactMarkdown>
+      </S.MarkdownContainer>
 
       <button type="button" onClick={handleCopyClick}>
         Copiar

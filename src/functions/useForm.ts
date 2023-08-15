@@ -39,6 +39,7 @@ export const useForm = () => {
       ...prevState,
       { ...pullRequestAdd, id: uuid() },
     ]);
+    setPullRequestAdd({ description: '', id: '' });
   };
 
   const removeItem = (id: string) => {
@@ -56,41 +57,33 @@ export const useForm = () => {
     });
   };
 
+  const toCapitalize = (text: string) =>
+    text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+
   const filterItemsForType = (type: TypeItem) =>
     items
       .filter(item => item.type === type)
-      .map((item, index) => `${index + 1}. ${item.description}`)
-      .join('; ');
+      .map((item, index) => `${index + 1}. ${toCapitalize(item.description)}`)
+      .join(';\n');
 
   const generateMarkdown = useMemo(() => {
     const markdownPR = pullRequest
-      .map((item, index) => `${index + 1}. #${item.description}`)
-      .join('; ');
+      .map((item, index) => `${index + 1}. #${toCapitalize(item.description)}`)
+      .join(';\n');
 
-    const markdown = `
-      ## Descrição
-      Nesta _branch_ contém as seguintes alterações:
-
-      ### Novas funcionalidades
-      ${filterItemsForType('feat')}
-
-      ### Correções
-      ${filterItemsForType('fix')}
-
-      ### Estilos
-      ${filterItemsForType('style')}
-
-      ### Refatorações
-      ${filterItemsForType('refactor')}
-
-      ### Testes
-      ${filterItemsForType('test')}
-
-      ### Mudanças em arquivos
-      ${filterItemsForType('chore')}
-
-      ## Pull Requests
-      ${markdownPR}`;
+    const markdown = `## Descrição\nNesta _branch_ contém as seguintes alterações:\n\n### Novas funcionalidades\n${filterItemsForType(
+      'feat'
+    )}\n\n### Correções\n${filterItemsForType(
+      'fix'
+    )}\n\n### Estilos\n${filterItemsForType(
+      'style'
+    )}\n\n### Refatorações\n${filterItemsForType(
+      'refactor'
+    )}\n\n### Testes\n${filterItemsForType(
+      'test'
+    )}\n\n### Mudanças em arquivos\n${filterItemsForType(
+      'chore'
+    )}\n\n## Pull Requests\n${markdownPR}`;
 
     return markdown;
   }, [items, pullRequest]);
